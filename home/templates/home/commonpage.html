@@ -1,0 +1,161 @@
+{% extends "home/base.html" %}
+
+
+{# Title of page send by view.py methon in context #}
+ {%block title%}
+   {{title}}
+ {%endblock%}
+ 
+ 
+ 
+ {%block jumbotron%}
+   
+   {% include 'home/tophead.html' with menu_list=menu_list company_list=company_list %}
+   
+ {%endblock%}
+ 
+ {%block body %}
+
+
+  {# home/mobilecover  #}
+  {% ifequal page "mobilecover"  %} 
+  <div class="row">
+  <div class="col-sm-2 well">
+    <ul class="nav nav-pills nav-stacked">
+  {% for company in company_list %}
+     {% ifequal company activecompany %}
+        <li class="active">
+          <a href="/home/mobilecover/?company={{company.company_name}}">
+            <img src="/media/{{company.company_logo}}"width="30px" class="img-thumbnail img-responsive grow">
+          {{company.company_name}}
+          </a>
+        </li>
+     {% else %}
+         <li>
+          <a href="/home/mobilecover/?company={{company.company_name}}">
+            <img src="/media/{{company.company_logo}}"width="30px" class="img-thumbnail img-responsive grow">
+            {{company.company_name}}
+          </a>
+         </li>
+     {% endifequal %}
+
+  {% endfor %}
+    </ul>
+    <hr/>
+
+  </div>
+  <div class="col-sm-1"></div>
+   <div class="col-sm-9">
+        <div class="row well">
+          <ul class="pagination pagination-lg">
+            <li ><a href="#"><img src="/media/{{activecompany.company_logo}}" width="20px"></a></li>
+            {% for model in modellist %}
+              <li {% ifequal activemodel model %} class="active" {% endifequal %} >
+
+                <a href="?company={{activecompany.company_name}}&model={{model.model_name}}">{{model.model_name}}</a></li>
+            {% endfor %}
+          </ul>
+          
+          <br>
+           {% include 'home/tophitdesign.html'  with tophitlist=itemlist %}
+        </div>
+   </div>
+  </div>
+
+  {% endifequal %}
+
+
+
+  {# --orderpage-- #}
+  {% ifequal page "orderpage" %}
+   
+   <div class="row"> 
+          <div class="col-sm-3">
+            <div class="well">
+             <img src="/media/{{item.design_Image}}" class="img-thumbnail img-responsive grow">
+            </div>
+
+            <div class="well">
+               <dl>
+                    <dt>Company</dt>
+                       <dd>{{item.design_model.model_company.company_name}}</dd>
+                    <dt>Model</dt>
+                       <dd>{{item.design_model.model_name}}</dd>
+               </dl> 
+            </div>
+          
+          </div>
+          <div class="col-sm-9">
+                <h2 class="text-center text-info">{{item.design_name}}</h2>
+                <hr/>
+                     {# tab menu #}
+                     <div class="row">
+  <h2 class="text-success">{{item.design_model.model_company.company_name}}~{{item.design_model.model_name}}~{{item.design_name}}</h2>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#home">Description</a></li>
+    <li><a data-toggle="tab" href="#menu1">Shipping</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active col-sm-6">
+      <h3></h3>
+      {{item.design_description}}
+
+    </div>
+    <div id="menu1" class="tab-pane fade col-sm-6">
+      <h3>Shipping</h3>
+      
+        Order is dispatched on the same day you click buy now(or max the next day),<br/>
+        our product reaches to you within 2-4 working days.
+        We try to deliver our products on time-everytime.
+  
+    </div>
+
+  </div>
+</div>
+
+   {#-------------------------------------------------------------#}
+              <hr/>
+                <div class="row">
+                   <div class="col-sm-6 text-info">
+                     <h3>Availablity = {{item.design_status}}</h3>
+                     <h3>Price = &#8377; {{item.design_price}}</h3>
+                   </div>
+                </div>
+                  
+                  
+                 
+                 <div class="row text-info">
+                  
+                     <div class=" col-sm-6">
+                      <div class="spinner">
+                       Quantity<input id="itemquantity" type="text" class="form-control" value="1">
+                      </div>
+                      <hr/>
+                      <button type="submit" id="addtocart"  class="btn btn-primary">Add to Cart</button>
+                      <button type="submit" id="buynow" class="btn btn-info">Buy Now</button>
+
+                    </div>
+                </div>
+
+
+          </div>
+
+   </div>
+   {#----similar item list ------#}
+   <div class="row well">
+        {% include 'home/tophitdesign.html'  with tophitlist=similaritem %}
+   </div>
+
+  {% endifequal %}
+ {# end orderpage #}
+
+
+    
+  {# footer of page #}
+  <div class="jumbotron">
+   {% include 'home/footer.html' %}
+   <code class="text-center">WebDesign : HIOS@Product 2016</code>
+  </div>
+
+ {% endblock %}

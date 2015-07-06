@@ -1,0 +1,46 @@
+{% extends "home/base.html" %}
+
+
+{# Title of page send by view.py methon in context #}
+ {%block title%}
+   {{title}}
+ {%endblock%}
+ 
+ 
+ 
+ {%block jumbotron%}
+   
+   {% include 'home/tophead.html' with menu_list=menu_list signupform=signupform %}
+   
+ {%endblock%}
+ 
+ {%block body %}
+ 
+  <div class="row">
+     <div class="col-sm-8 well well-sm">
+       {% include "home/myCarousel.html" with carousel=carousel %}
+     </div>
+
+     <div class="col-sm-4 ">
+       {% include "home/offers.html" with offers=offers %}
+     </div>
+  
+  </div>
+  
+  
+  <div class="row well">
+  {% include 'home/tophitdesign.html'  with tophitlist=tophitlist %}
+  </div>
+  
+  
+  <div class="row well">
+    {% include 'home/selfilist.html' with selfilist=selfilist %}
+  </div>
+  
+  <div class="jumbotron">
+   {% include 'home/footer.html' %}
+   <code class="text-center">WebDesign : HIOS@Product 2016</code>
+  </div>
+  
+ 
+ {%endblock%}

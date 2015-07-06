@@ -1,0 +1,31 @@
+<div class="container">
+  <h2>Dynamic Tabs</h2>
+  <ul class="nav nav-tabs">
+    <li class="active"><a data-toggle="tab" href="#login">Login</a></li>
+    <li><a data-toggle="tab" href="#signup">Signup</a></li>
+    
+  </ul>
+
+  <div class="tab-content">
+    <div id="login" class="tab-pane fade in active">
+     <form action="/home/login/">
+            <table class="table table-striped">
+            	{{loginform.as_table}}
+            </table>
+           <input type="submit" class="btn btn-info">
+         </form>
+
+    </div>
+    <div id="signup" class="tab-pane fade">
+      
+          <form action="/home/signup/">
+             {% csrf_token %}
+            <table class="table table-striped">
+            	{{signupform.as_table}}
+            </table>
+           <input type="submit" class="btn btn-info">
+         </form>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,17 @@
+
+{% for tophit in tophitlist %}
+<a href="/home/mobilecover/?code={{tophit.design_code}}">
+<div class="col-sm-2">
+  <img src="/media/{{tophit.design_Image}}" class="img-thumbnail img-responsive grow" >
+  <h5 class="text-primary text-center">
+    <span class="text-information">{{tophit.desing_specification}}</span>
+    <br/>
+    {{tophit.design_model.model_company}} {{tophit.design_model}}
+   </h5>
+  <hr/>
+  <h4 class="text-info text-center">&#8377; {{tophit.design_price}}</h4>
+</div>
+</a>
+{% endfor %}
+
+

@@ -1,0 +1,53 @@
+ 
+ <style>
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      width: 100%;
+      margin: auto;
+  }
+  </style>
+<br>
+{% load staticfiles %}
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+       {% for  c in carousel %}
+        
+        {% ifequal forloop.counter 1 %}
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        {%else %}
+         <li data-target="#myCarousel" data-slide-to="{{forloop.counter0}}"></li>
+        {% endifequal %}
+        
+      {% endfor %}
+    </ol>
+
+    <!-- Wrapper for slides -->
+   <div class="carousel-inner" role="listbox">
+     
+     {% for banner in carousel %}
+     
+     {% ifequal forloop.counter 1 %}
+        <div class="item active">
+        <img src="{% static banner.Imageurl %}" alt="{{banner.headline}}" width="460" height="345">
+        <div class="carousel-caption">
+          <h3>{{banner.headline}}</h3>
+          <p>{{banner.description}}</p>
+        </div>
+       </div>
+     {% else %}
+     
+       <div class="item">
+        <img src="{% static banner.Imageurl %}" alt="{{banner.headline}}" width="460" height="345">
+        <div class="carousel-caption">
+          <h3>{{banner.headline}}</h3>
+          <p>{{banner.description}}</p>
+        </div>
+       </div>
+     {% endifequal %}
+       
+     
+     {% endfor %}    
+    </div> 
+  
+    </div>
