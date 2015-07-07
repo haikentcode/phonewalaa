@@ -98,15 +98,13 @@ class User(models.Model):
     firstName=models.CharField(max_length=50)
     lastName=models.CharField(max_length=50)
     emailId=models.EmailField(blank=False,null=False,primary_key=True)
-    contactNo=models.IntegerField()
+    contactNo=models.CharField(max_length=10)
     cityName=models.CharField(max_length=50)
     password=models.CharField(max_length=50)
-    dateOfBirth=models.DateField(blank=False,null=False)
+    dateOfBirth=models.DateField(blank=True,null=True)
 
-
-    
     def __str__(self):
-        return "%s %s %s"%(self.first_Name,self.last_Name,self.email_Id)
+        return "%s %s %s"%(self.firstName,self.lastName,self.emailId)
     
     class Admin:
         pass

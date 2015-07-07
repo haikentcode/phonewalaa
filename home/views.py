@@ -51,6 +51,8 @@ def get_modellist(request,company="Apple"):
       modellist=Phone_Model.objects.filter(model_company__company_name=company)
       return modellist
 
+def main(request,senddata):
+    pass
 def index(request):
     
      #menu list 
@@ -60,7 +62,6 @@ def index(request):
      tophitlist=get_tophit_design(request)
      selfilist=get_selfilist(request)
      company_list=get_companylist(request)
-
      context=RequestContext(request, {'title':'phonewalaa','menu_list':menu_list,'carousel':carousel,'offers':offers,\
       'tophitlist':tophitlist,'selfilist':selfilist,'company_list':company_list,\
        'signupform':SignupForm(),'loginform':LoginForm()})
@@ -77,25 +78,19 @@ def sign_Up(request):
      emailId=data.get('emailId')
      contactNo=data.get('contactNo')
      cityName=data.get('cityName')
-     gender=data.get('gender')
      password=data.get('password')
      dateOfBirth=data.get('dateOfBirth')
      try:
-          obj=User.objects.get(email_Id=email_Id)
-          return HttpResponse('False')
+         if(User.objects.filter(emailId=emailId).count()==0):
+              obj=User(firstName=firstName,lastName=lastName,emailId=emailId,contactNo=contactNo,cityName=cityName,password=password,dateOfBirth=dateOfBirth)
+              obj.save()
+              request.session['emailId']=emailId
+              return HttpResponse('True')
+         else:
+             return HttpResponse('User Exist')
      except:
-          obj=user.object.create()
-          obj.firstName=firstName
-          obj.lastName=lastName
-          obj.emailId=emailId
-          obj.contactNo=contactNo
-          obj.cityName=cityName
-          obj.password=password
-          obj.dateOfBirth=dateOfBirth
-          obj.gender=gender
-          obj.save()
-          request.session['emailId']=emailId
-          return HttpResponse('True')
+         return HttpResponse('False')     
+          
 
 def  login_Authantication(request):
 
@@ -103,18 +98,17 @@ def  login_Authantication(request):
      emailId=data.get('emailId')
      password=data.get('password')
      flag=False
-
      try:
-          obj=user.objects.get(emailId=emailId)
+          obj=user.objects.filter(emailId=emailId)
           if obj.emailId==emailId and obj.password==password:
                flag=True
                request.session['email_Id']=email_Id
           else:
                flag=False
      except:
-          HttpResponse('False')
+          return HttpResponse('exception')
 
-     return HttpResponse(flag)
+     return HttpResponse("k")
 
 def  logOut(request):
 
