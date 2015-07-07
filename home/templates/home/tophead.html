@@ -43,8 +43,10 @@
 </div>
 
 <div class="col-sm-2">
-
-  <span class="badge">7</span>
+  
+  {% if 'itemoncart_count' in request.session %}
+  <span class="badge">{{request.session.itemoncart_count}}</span>
+  {%endif%}
   <br>
   <img src="{% static 'home/img/ShoppingCart.png'%}" class="img-responsive" width="50px" height="50px"/>
 </div>

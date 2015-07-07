@@ -48,7 +48,9 @@
    <div class="col-sm-9">
         <div class="row well">
           <ul class="pagination pagination-lg">
+            {% if activecompany.company_logo %}
             <li ><a href="#"><img src="/media/{{activecompany.company_logo}}" width="20px"></a></li>
+            {% endif %}
             {% for model in modellist %}
               <li {% ifequal activemodel model %} class="active" {% endifequal %} >
 
@@ -126,16 +128,18 @@
                   
                  
                  <div class="row text-info">
-                  
+                  <form action="/home/order/" method="post">
+                     {% csrf_token %}
+                     <input name="itemcode" value="{{item.design_code}}" style="display:none"> 
                      <div class=" col-sm-6">
                       <div class="spinner">
-                       Quantity<input id="itemquantity" type="text" class="form-control" value="1">
+                       Quantity<input name="itemquantity" type="text" class="form-control" value="1">
                       </div>
                       <hr/>
-                      <button type="submit" id="addtocart"  class="btn btn-primary">Add to Cart</button>
-                      <button type="submit" id="buynow" class="btn btn-info">Buy Now</button>
-
-                    </div>
+                    <input type="submit" name="action"  class="btn btn-primary" value="Add to Cart">
+                    <input type="submit" name="action" class="btn btn-info" value="Buy Now">
+                     </div>
+                  </form>
                 </div>
 
 
@@ -150,11 +154,69 @@
   {% endifequal %}
  {# end orderpage #}
 
+{# cartitem page #}
+{% ifequal page "cartitem"%}
+ <table class="table table-hover table-striped">
+  <thead>
+    <tr class="info">
+   <th>ITEM</th><th>ITEM NAME</th><th>ITEM PRICE</th><th>ITEM QUANTITY</th><th>TOTAL</th>
+   <th></th>
+   </tr>
+  </thead>
+  <tbody>
+ {% for x in cartitemlist %}
+  <tr>
+     <td>
+      <img src="/media/{{x.design_Image}}" width="50px" height="60px" class="img-thumbnail img-responsive grow">
+     </td>
+     <td>
+       <h4 class="text-info">{{x.design_name}}</h4>
+     </td>
+     <td>
+      <h3 class="text-info">{{x.design_price}}</h3>
+     </td>
+     <td>
+      <div class="spinner">
+        {% with code=x.design_code %}
+       <input class="form-control" value="{{request.session.itemoncart.code}}">
+        {% endwith %}
+      </div>
+     </td>
+     <td>
+      <h3 class="text-info">{{x.design_price}}*{{request.session.itemoncart.x.design_code}}</h3>
+     </td>
+     <td>
+      <input type="submit" value="cancel" class="btn btn-warning">
+     </td>
+
+  </tr> 
+ {% endfor %}
+ <tr class="primary">
+  <td></td>
+  <td>
+    <div class="spinner">
+       <input class="form-control" value="{{request.session.itemoncart.code}}">
+    </div>
+  </td>
+  <td>
+     <input type="submit" value="Apply Code" class="btn btn-info">
+  </td>
+  <td>
+   <h3 class="text-info"> Subtotal</h3>
+  </td>
+  <td></td>
+  <td></td>
+ </tr>
+ </tbody>
+</table>
+{% endifequal %}
+{# end cartitem page#}
 
     
   {# footer of page #}
   <div class="jumbotron">
    {% include 'home/footer.html' %}
+   {# General Use Licence All Right to HIOS Organigestion #}
    <code class="text-center">WebDesign : HIOS@Product 2016</code>
   </div>
 
