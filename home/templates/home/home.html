@@ -13,27 +13,60 @@
    {% include 'home/tophead.html' with menu_list=menu_list signupform=signupform %}
    
  {%endblock%}
+
+ 
  
  {%block body %}
  
   <div class="row">
-     <div class="col-sm-8 well well-sm">
+     <div class="col-sm-12 well well-sm">
        {% include "home/myCarousel.html" with carousel=carousel %}
      </div>
-
-     <div class="col-sm-4 ">
+  
+  </div>
+  
+  <div class="row">
+     <div class="col-sm-4">
        {% include "home/offers.html" with offers=offers %}
      </div>
-  
+     <div class="col-sm-4">
+       {% include "home/offers.html" with offers=offers %}
+     </div>
+     <div class="col-sm-4">
+       {% include "home/offers.html" with offers=offers %}
+     </div>
+  </div>
+  <div class="row well">
+
+    <div class="row well">
+      <h3 class="text-center"><span class="label label-default">HIGHESTRATED</span></h3>
+      <hr/>
+      {# highesrated#}
+      {% include 'home/tophitdesign.html'  with tophitlist=tophitlist %}
+    </div>
+
+    <div class="row well">
+      
+      <h3 class="text-center"><span class="label label-default">POPULAR STUFF</span></h3>
+      <hr/>
+      {# higest saled #}
+      {% include 'home/tophitdesign.html'  with tophitlist=topsaledesign %}
+    </div class="row well">
+     
+       {# topnewdesign #}
+
+    <div class="row well">
+      <hr/>
+      <h3 class="text-center"><span class="label label-default">LATEST DESIGN</span></h3>
+      <hr/>
+     {% include 'home/tophitdesign.html'  with tophitlist=topnewdesign %}
+    </div>
+
   </div>
   
   
   <div class="row well">
-  {% include 'home/tophitdesign.html'  with tophitlist=tophitlist %}
-  </div>
-  
-  
-  <div class="row well">
+    
     {% include 'home/selfilist.html' with selfilist=selfilist %}
   </div>
   

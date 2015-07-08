@@ -12,7 +12,8 @@ from forms import SignupForm ,LoginForm
 
 
 def menuList(request):
-  menu_list=["Home","Cover","Gift","Create Your Own Design","Track Your Order"]   
+  menu_list=["Home","Cover","Gift","Create Your Own Design","Track Your Order"]
+  menu_list=[x.upper() for x in menu_list]   
   return menu_list
 
 def get_carousel(request):
@@ -26,7 +27,7 @@ def get_offers(request):
 
 def get_tophit_design(request,company='all',modelname='all'):
     if company=='all'and modelname=='all':
-        tophitlist=Phone_Design.objects.all().order_by('-design_hit_count')[:10]
+        tophitlist=Phone_Design.objects.all().order_by('-design_hit_count')[:6]
 
     elif modelname=='all':
         tophitlist=Phone_Design.objects.filter(design_model__model_company__company_name=company)
@@ -42,6 +43,9 @@ def get_selfilist(request):
 
      return selfilist
 
+def get_topsaledesign(request):
+    topsaledesign=Phone_Design.objects.all().order_by('-upload_date')[:6]
+    return topsaledesign
 
 def get_companylist(request):
      company_list=Phone_Company.objects.all()
@@ -50,7 +54,9 @@ def get_companylist(request):
 def get_modellist(request,company="Apple"):
       modellist=Phone_Model.objects.filter(model_company__company_name=company)
       return modellist
-
+def get_topnewdesign(request):
+    topnewdesign=Phone_Design.objects.all().order_by('-upload_date')[:6]
+    return topnewdesign
 def main(request):
      menu_list=menuList(request)
      carousel=get_carousel(request)
@@ -64,7 +70,11 @@ def main(request):
      return data  
     
 def index(request):
+     topnewdesign=get_topnewdesign(request)
+     topsaledesign=get_topsaledesign(request)
      maindata=main(request)
+     maindata.update({'topnewdesign':topnewdesign})
+     maindata.update({'topsaledesign':topnewdesign})
      context=RequestContext(request,maindata)
      return render_to_response('home/home.html',context)
 
