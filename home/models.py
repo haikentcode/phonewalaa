@@ -111,15 +111,15 @@ class User(models.Model):
 
 
 class ShippingAddress(models.Model):
-    fullName=models.TextField(max_length=100)
-    addressLine_1=models.TextField(max_length=200)
-    addressLine_2=models.TextField(max_length=200)
-    town=models.TextField(max_length=20)
-    stateName=models.TextField(max_length=50)
+    fullName=models.CharField(max_length=100)
+    addressLine_1=models.CharField(max_length=200)
+    addressLine_2=models.CharField(max_length=200)
+    town=models.CharField(max_length=20)
+    stateName=models.CharField(max_length=50)
     pinCode=models.IntegerField()
-    countaryName=models.TextField(max_length=20)
-    mobileNo=models.TextField(max_length=15)
-    additionalAddress=models.TextField(max_length=500)
+    countaryName=models.CharField(max_length=20)
+    mobileNo=models.CharField(max_length=15)
+    additionalAddress=models.CharField(max_length=500)
     user=models.ForeignKey(User)
 
 

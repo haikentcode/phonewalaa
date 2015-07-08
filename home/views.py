@@ -3,7 +3,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from home.models import User,Phone_Company,Phone_Model,Phone_Design,Selfi_Image
+from home.models import User,Phone_Company,Phone_Model,Phone_Design,Selfi_Image,Offers
 
 from django.db.models import Q
 from home.models import Create_Own_Design
@@ -20,7 +20,7 @@ def get_carousel(request):
    return carousel
 
 def get_offers(request):
-    offers=[{'headline':"50% off",'description':"  get Soon "},{'headline':"30% off",'description':"  get Soon "}]
+    offers=Offers.objects.all()[:5]
     return offers 
 
 
@@ -70,7 +70,7 @@ def index(request):
 
 
 def sign_Up(request):
-
+  if request.POST:
      data=request.POST
      firstName=data.get('firstName')
      lastName=data.get('lastName')
@@ -91,12 +91,13 @@ def sign_Up(request):
          return HttpResponse('False')     
           
 
-def  login_Authantication(request):
-
+def  login(request):
+  if request.POST:
      data=request.POST
      emailId=data.get('emailId')
      password=data.get('password')
      flag=False
+
      try:
           obj=User.objects.filter(emailId=emailId)
           if obj.emailId==emailId and obj.password==password:
@@ -107,9 +108,8 @@ def  login_Authantication(request):
      except:
           return HttpResponse('exception')
 
-     return HttpResponse("k")
 
-def  logOut(request):
+def  logout(request):
 
      try:
          del request.session['emailId']
@@ -117,16 +117,6 @@ def  logOut(request):
          pass
      return HttpResponseRedirect("/home/")
 
-
-def openblog(request,page):
-    maindata=main(request)
-    try:
-        obj=blogpost.objects.filter(blog__blogname=page)[0]
-        maindata.update({'objkey':obj})
-        context=RequestContext(request,maindata)
-        return render_to_response('home/blog.html',context)
-    except:
-        return HttpResponse('There are no such type of pages')
 
 
 def page_common(request,page):
@@ -194,9 +184,25 @@ def preturn(request):
 def  cancellation(request):
      return openblog(request,"likedin")
 
+<<<<<<< HEAD
 """
 
-def order(request):
+def cartItemlist(request):
+      maindata=main(request)
+      maindata.update({'page':"cartitem"})
+      template='home/commonpage.html'
+      cartitemlist=[]
+      tlist=request.session['itemoncart'].keys()
+      try:
+       cartitemlist=[Phone_Design.objects.get(design_code=x) for x in tlist]
+      except:
+         pass
+      maindata.update({'cartitemlist':cartitemlist})  
+      context=RequestContext(request,maindata)  
+      return render_to_response(template,context)
+
+
+def order(request): #for add cart and buy now response
 
   if request.POST.get('action'): 
     itemcode=str(request.POST.get('itemcode'))
@@ -214,21 +220,11 @@ def order(request):
     else:
           request.session['itemoncart_count']=1 
   
-  if request.POST.get('action')=='Buy Now':
-      maindata=main(request)
-      maindata.update({'page':"cartitem"})
-      template='home/commonpage.html'
-      cartitemlist=[]
-      tlist=request.session['itemoncart'].keys()
-      try:
-       cartitemlist=[Phone_Design.objects.get(design_code=x) for x in tlist]
-      except:
-         pass
-      maindata.update({'cartitemlist':cartitemlist})  
-      context=RequestContext(request,maindata)  
-      return render_to_response(template,context)
-  else:
+  if request.POST.get('action')=='Add to Cart':
        return index(request)
+  else:
+       return cartItemlist(request)
+       
 
 def order_page(request,code):
           maindata=main(request)
