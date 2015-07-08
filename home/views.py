@@ -8,7 +8,7 @@ from home.models import User,Phone_Company,Phone_Model,Phone_Design,Selfi_Image
 from django.db.models import Q
 from home.models import Create_Own_Design
 from forms import SignupForm ,LoginForm
-
+from home.models import blog ,blogpost
 
 
 def menuList(request):
@@ -98,10 +98,10 @@ def  login_Authantication(request):
      password=data.get('password')
      flag=False
      try:
-          obj=user.objects.filter(emailId=emailId)
+          obj=User.objects.filter(emailId=emailId)
           if obj.emailId==emailId and obj.password==password:
                flag=True
-               request.session['email_Id']=email_Id
+               request.session['emailId']=emailId
           else:
                flag=False
      except:
@@ -120,25 +120,28 @@ def  logOut(request):
 
 def openblog(request,page):
     maindata=main(request)
-    maindata.update({'page':page})
-    context=RequestContext(request,maindata)
-    return render_to_response('home/blog.html',maindata)
+    try:
+        obj=blogpost.objects.filter(blog__blogname=page)[0]
+        maindata.update({'objkey':obj})
+        context=RequestContext(request,maindata)
+        return render_to_response('home/blog.html',context)
+    except:
+        return HttpResponse('There are no such type of pages')
 
-def profile(request):
-    return openblog(request,"profile")
 
-def overview(request):
-     return openblog(request,"overview")
+def page_common(request,page):
+    maindata=main(request)
+    try:
+        obj=blogpost.objects.filter(blog__blogname=page)
+        maindata.update({'objkey':obj})
+        context=RequestContext(request,maindata)
+        return render_to_response('home/blog.html',context)
+    except:
+        return HttpResponse('There are no such type of pages')
 
-def policy(request):
-     return openblog(request,"policy")
-
-def  termandcondition(request):
-      return openblog(request,"termandcondition")
 
 def  temperglass(request):
       return openblog(request,"temperglass")
-
 
 def commingsoon(request):
        return openblog(request,"commingsoon")
@@ -150,16 +153,30 @@ def  laptopskin(request):
        return openblog(request,"laptopskin")
 
 
+"""
+def profile(request):
+    return openblog(request,"Profile")
+
+def overview(request):
+     return openblog(request,"Overview")
+
+def policy(request):
+     return openblog(request,"Policy")
+
+def  termandcondition(request):
+      return openblog(request,"Terms & Condition")
+
+
 def  event(request):
-       return openblog(request,"event")
+       return openblog(request,"Event")
 
 
-def   social(request):
-       return openblog(request,"social") 
+def  social(request):
+       return openblog(request,"Social")
 
 
-def    press(request):
-         return openblog(request,"press") 
+def   press(request):
+         return openblog(request,"Press")
 
 
 
@@ -177,6 +194,7 @@ def preturn(request):
 def  cancellation(request):
      return openblog(request,"likedin")
 
+"""
 
 def order(request):
 

@@ -1,13 +1,12 @@
 {% extends "home/base.html" %}
 
-
 {# Title of page send by view.py methon in context #}
- {%block title%}
+
+{%block title%}
    {{title}}
  {%endblock%}
- 
- 
- 
+
+
  {%block jumbotron%}
    
    {% include 'home/tophead.html' with menu_list=menu_list company_list=company_list %}
@@ -16,6 +15,67 @@
  
  {%block body %}
 
+{% if  objkey.0.blog.blogname == "Profile" or objkey.0.blog.blogname == "Overview"  %}
+
+{% for obj in objkey %}
+
+{% if forloop.counter|divisibleby:2 %}
+<div class="row">
+ <div class="col-sm-8">
+  <blockquote>
+  <p>{{ obj.postData}} </p>
+</blockquote>
+   <br/>
+  <br/>
+
+ </div>
+
+ <div class="col-sm-4">
+ <img src="/media/{{ obj.postImage }}" class="img-thumbnail img-responsive grow" width="300px" height="300px" >
+
+</div>
+
+</div>
+
+{% else %}
+<div class="row">
+
+ <div class="col-sm-4">
+ <img src="/media/{{ obj.postImage }}" class="img-thumbnail img-responsive grow" width="300px" height="300px" >
+ </div>
+
+ <div class="col-sm-8">
+ <blockquote>
+  <p >{{ obj.postData}} </p>
+  </blockquote>
+   <br/>
+  <br/>
+ </div>
+
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+
+{% else  %}
+
+{% for obj in objkey %}
+<div class="row">
+ <img src="/media/{{ obj.postImage }}" class="img-thumbnail img-responsive grow" width="300px" height="300px" >
+  <br/>
+  <br/>
+
+  <p >{{ obj.postData}} </p>
+  <br/>
+  <br/>
+
+</div>
+
+{% endfor %}
+
+{% endif %}
 
 
   {# footer of page #}
