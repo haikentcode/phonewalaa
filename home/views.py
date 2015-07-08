@@ -9,15 +9,21 @@ from django.db.models import Q
 from home.models import Create_Own_Design
 from forms import SignupForm ,LoginForm
 from home.models import blog ,blogpost
+from home.models import Banner
 
 
 def menuList(request):
-  menu_list=["Home","Cover","Gift","Create Your Own Design","Track Your Order"]   
+  menu_list=["HOME","PRODUCT","GIFT","CUSTOMIZE COVER","MAKE MONEY","TRACK YOUR ORDER"]
   return menu_list
 
 def get_carousel(request):
    carousel=[{'headline':"haikent",'description':"this is stuf working here",'Imageurl':"home/bannerimage/1.jpg" },{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/2.jpg'},{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/3.jpg'},{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/4.jpg'},{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/5.jpg'}]
    return carousel
+
+def get_baanner(request):
+    obj=Banner.objects.all()
+    print obj
+    return obj
 
 def get_offers(request):
     offers=Offers.objects.all()[:5]
@@ -39,7 +45,6 @@ def get_tophit_design(request,company='all',modelname='all'):
 
 def get_selfilist(request):
      selfilist=Selfi_Image.objects.all().order_by('-selfi_time')[:10]
-
      return selfilist
 
 
@@ -53,7 +58,9 @@ def get_modellist(request,company="Apple"):
 
 def main(request):
      menu_list=menuList(request)
-     carousel=get_carousel(request)
+     #carousel=get_carousel(request)
+     carousel=get_baanner(request)
+     print carousel
      offers=get_offers(request)
      tophitlist=get_tophit_design(request)
      selfilist=get_selfilist(request)
@@ -66,6 +73,7 @@ def main(request):
 def index(request):
      maindata=main(request)
      context=RequestContext(request,maindata)
+     #get_baanner(request)
      return render_to_response('home/home.html',context)
 
 

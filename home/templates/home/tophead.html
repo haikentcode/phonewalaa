@@ -50,18 +50,16 @@
   {% if 'itemoncart_count' in request.session %}
   <span class="badge">{{request.session.itemoncart_count}}</span>
   {%endif%}
-  <br>
   <a href="/home/order/">
     <img src="{% static 'home/img/ShoppingCart.png'%}" class="img-responsive" width="50px" height="50px"/>
   </a>
 </div>
 
-
-
 </div>
 
 
 <div class="row">
+
 <ul class="nav nav-tabs">
   <li><a href="/home">{{menu_list.0}}</a></li>
   <li class="dropdown">
@@ -81,9 +79,10 @@
     </div >
   </li>
 
-   <li><a href="">{{menu_list.2}}</a></li>
+  <li><a href="">{{menu_list.2}}</a></li>
   <li><a href="#">{{menu_list.3}}</a></li>
   <li><a href="#">{{menu_list.4}}</a></li>
+  <li><a herf="#">{{menu_list.5}}</a></li>
  </ul>
  </div>
  
