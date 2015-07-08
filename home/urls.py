@@ -4,7 +4,8 @@ from .import views
 urlpatterns=[
             url(r'^$', views.index, name='index'),
             url(r'^signup/$',views.sign_Up,name='sign_Up'),
-            url(r'^login/$',views.login_Authantication,name='login_Authantication'),
+            url(r'^login/$',views.login,name='login'),
+            url(r'logout/$',views.logout,name="logout"),
             url(r'^profile/$',views.profile,name="profile"),
             url(r'^overview/$',views.overview,name="overview"),
             url(r'^policy/$',views.policy,name="policy"),

@@ -1,9 +1,19 @@
 {% for offer in offers %}
 
+
+
 <div class="alert alert-success">
- 
- <a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a>
- <strong>{{offer.headline}}</strong>{{offer.description}}
+<!--<div class="row">	
+  <div class="col-sm-4">	
+    <img width="80px" src="/media/{{offer.offer_image}}" class="img-thumbnail img-responsive grow">
+  </div>
+  <div class="col-sm-8">-->
+   <a href="#" class="close" data-dismiss="alert" arial-label="close">&times;</a>
+   <a href="#">
+     <strong>{{offer.headline}}</strong>{{offer.description}}
+   </a>
+  <!--</div> 
+</div>-->
 </div>
 
 {% endfor %}
