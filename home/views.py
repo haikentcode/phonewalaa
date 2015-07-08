@@ -3,7 +3,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from home.models import User,Phone_Company,Phone_Model,Phone_Design,Selfi_Image,Offers
+from home.models import User,Phone_Company,Phone_Model,Phone_Design,Selfi_Image,Offers,ShippingAddress
 
 from django.db.models import Q
 from home.models import Create_Own_Design
@@ -68,6 +68,14 @@ def index(request):
      context=RequestContext(request,maindata)
      return render_to_response('home/home.html',context)
 
+def shipping(request):
+  maindata=main(request)
+  form=ShippingAddress()
+  maindata.update({"shippingform":form})
+  maindata.update({'page':"shipping"})
+  context=RequestContext(request,maindata)
+  template='home/commonpage.html'
+  return render_to_response(template,context)
 
 def sign_Up(request):
   if request.POST:
@@ -165,9 +173,6 @@ def    press(request):
 
 def payments(request):
      return openblog(request,"payments")
-
-def shipping(request):
-      return openblog(request,"shipping")
 
 
 def preturn(request):
