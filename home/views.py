@@ -51,24 +51,23 @@ def get_modellist(request,company="Apple"):
       modellist=Phone_Model.objects.filter(model_company__company_name=company)
       return modellist
 
-def main(request,senddata):
-    pass
-def index(request):
-    
-     #menu list 
+def main(request):
      menu_list=menuList(request)
      carousel=get_carousel(request)
      offers=get_offers(request)
      tophitlist=get_tophit_design(request)
      selfilist=get_selfilist(request)
      company_list=get_companylist(request)
-     context=RequestContext(request, {'title':'phonewalaa','menu_list':menu_list,'carousel':carousel,'offers':offers,\
+     data={'title':'phonewalaa','menu_list':menu_list,'carousel':carousel,'offers':offers,\
       'tophitlist':tophitlist,'selfilist':selfilist,'company_list':company_list,\
-       'signupform':SignupForm(),'loginform':LoginForm()})
+       'signupform':SignupForm(),'loginform':LoginForm()}
+     return data  
+    
+def index(request):
+     maindata=main(request)
+     context=RequestContext(request,maindata)
      return render_to_response('home/home.html',context)
 
-
-     
 
 def sign_Up(request):
 
@@ -119,41 +118,118 @@ def  logOut(request):
      return HttpResponseRedirect("/home/")
 
 
+def openblog(request,page):
+    maindata=main(request)
+    maindata.update({'page':page})
+    context=RequestContext(request,maindata)
+    return render_to_response('home/blog.html',maindata)
+
 def profile(request):
-    menu_list=menuList(request)
-    company_list=get_companylist(request)
-
-    return render_to_response('home/commonpage.html',{'page':"profile",'menu_list':menu_list,'company_list':company_list})
-
+    return openblog(request,"profile")
 
 def overview(request):
-     return HttpResponse("overview")
-
-
+     return openblog(request,"overview")
 
 def policy(request):
-     return HttpResponse("policy") 
-
-
+     return openblog(request,"policy")
 
 def  termandcondition(request):
-      return HttpResponse("termandcondition")
+      return openblog(request,"termandcondition")
 
+def  temperglass(request):
+      return openblog(request,"temperglass")
+
+
+def commingsoon(request):
+       return openblog(request,"commingsoon")
+
+def  mobileskin(request):
+       return openblog(request,"mobileskin")
+
+def  laptopskin(request):
+       return openblog(request,"laptopskin")
+
+
+def  event(request):
+       return openblog(request,"event")
+
+
+def   social(request):
+       return openblog(request,"social") 
+
+
+def    press(request):
+         return openblog(request,"press") 
+
+
+
+def payments(request):
+     return openblog(request,"payments")
+
+def shipping(request):
+      return openblog(request,"shipping")
+
+
+def preturn(request):
+      return openblog(request,"preturn")              
+            
+
+def  cancellation(request):
+     return openblog(request,"likedin")
+
+
+def order(request):
+
+  if request.POST.get('action'): 
+    itemcode=str(request.POST.get('itemcode'))
+    itemquantity=int(request.POST.get('itemquantity'))
+    if 'itemoncart' not in request.session:
+        request.session['itemoncart']={}
+    if itemcode in request.session['itemoncart']:
+        oldq=int(request.session['itemoncart'][itemcode])
+        request.session['itemoncart'][itemcode]=oldq+itemquantity
+    else:
+        request.session['itemoncart'][itemcode]=itemquantity    
+    if 'itemoncart_count' in request.session:
+          old=int(request.session['itemoncart_count'])
+          request.session['itemoncart_count']=old+itemquantity
+    else:
+          request.session['itemoncart_count']=1 
+  
+  if request.POST.get('action')=='Buy Now':
+      maindata=main(request)
+      maindata.update({'page':"cartitem"})
+      template='home/commonpage.html'
+      cartitemlist=[]
+      tlist=request.session['itemoncart'].keys()
+      try:
+       cartitemlist=[Phone_Design.objects.get(design_code=x) for x in tlist]
+      except:
+         pass
+      maindata.update({'cartitemlist':cartitemlist})  
+      context=RequestContext(request,maindata)  
+      return render_to_response(template,context)
+  else:
+       return index(request)
 
 def order_page(request,code):
-          menu_list=menuList(request)
-          company_list=get_companylist(request)
+          maindata=main(request)
+          maindata.update({'page':"orderpage"})
           item=Phone_Design.objects.get(design_code=code)
           item.design_hit_count+=1
           item.save()
+          maindata.update({'item':item})
           similaritem=get_tophit_design(request,item.design_model.model_company.company_name,\
             item.design_model.model_name)
-          return render_to_response('home/commonpage.html',{'page':'orderpage','item':item,'menu_list':menu_list,'company_list':company_list,'similaritem':similaritem})
+          maindata.update({'similaritem':similaritem})
+          context=RequestContext(request,maindata)
+          template='home/commonpage.html'
+          return render_to_response(template,context)
         
 
 def  mobilecover(request):
-     menu_list=menuList(request)
-     company_list=get_companylist(request)
+     maindata=main(request)
+     maindata.update({'page':"mobilecover"})
      itemlist=[]
      activecompany=None
      activemodel=None
@@ -178,72 +254,14 @@ def  mobilecover(request):
      else:
             itemlist=get_tophit_design(request)
      
-
-   
-
-     return render_to_response('home/commonpage.html',\
-      {'page':"mobilecover",'menu_list':menu_list,'company_list':company_list,\
-      'itemlist':itemlist,'activecompany':activecompany,'modellist':modellist,\
-      'activemodel':activemodel})
-
-
-
-def  temperglass(request):
-      return HttpResponse("temperglass")
+     maindata.update({'itemlist':itemlist,'activecompany':activecompany,'modellist':modellist,'activemodel':activemodel})
+     context=RequestContext(request,maindata)
+     template='home/commonpage.html'
+     return render_to_response(template,context)
 
 
 
 
-def commingsoon(request):
-       return HttpResponse("commingsoon")
-
-
-def  mobileskin(request):
-       return HttpResponse("mobileskin")
-
-
-def  laptopskin(request):
-       return HttpResponse("laptopskin")
-
-
-
-def  event(request):
-       return HttpResponse("event")
-
-
-def   social(request):
-       return HttpResponse("social") 
-
-
-def    press(request):
-         return HttpResponse("press") 
-
-
-def facebook(request):
-       return HttpResponse("facebook")
-
-
-def instagram(request):
-      return HttpResponse("instagram")
-
-
-def twiter(request):
-     return HttpResponse("twiter")
-
-
-def payments(request):
-     return HttpResponse("payments")
-
-def shipping(request):
-      return HttpResponse("shipping")
-
-
-def preturn(request):
-      return HttpResponse("preturn")              
-            
-
-def linkedin(request):
-     return HttpResponse("likedin")
 
 def create_Own_Design(request):
 
