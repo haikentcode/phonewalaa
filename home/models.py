@@ -111,15 +111,15 @@ class User(models.Model):
 
 
 class ShippingAddress(models.Model):
-    fullName=models.TextField(max_length=100)
-    addressLine_1=models.TextField(max_length=200)
-    addressLine_2=models.TextField(max_length=200)
-    town=models.TextField(max_length=20)
-    stateName=models.TextField(max_length=50)
+    fullName=models.CharField(max_length=100)
+    addressLine_1=models.CharField(max_length=200)
+    addressLine_2=models.CharField(max_length=200)
+    town=models.CharField(max_length=20)
+    stateName=models.CharField(max_length=50)
     pinCode=models.IntegerField()
-    countaryName=models.TextField(max_length=20)
-    mobileNo=models.TextField(max_length=15)
-    additionalAddress=models.TextField(max_length=500)
+    countaryName=models.CharField(max_length=20)
+    mobileNo=models.CharField(max_length=15)
+    additionalAddress=models.CharField(max_length=500)
     user=models.ForeignKey(User)
 
 
@@ -152,6 +152,13 @@ class blog(models.Model):
       blogcode=models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
       blogname=models.CharField(max_length=100)
 
+      class Admin:
+          pass
+
+      def  __str__(self):
+          return "%s %s"%(self.blogcode,self.blogname)
+
+
 class blogpost(models.Model):
     postCode=models.CharField(max_length=100, blank=True, unique=True, default=uuid.uuid4)
     headLine=models.CharField(max_length=200)
@@ -160,5 +167,22 @@ class blogpost(models.Model):
     time=models.DateTimeField(default=datetime.now(), blank=None, null=None)
     postStatus=models.CharField(max_length=10,default="show")
     postImage=models.ImageField(upload_to=Image_Folder+'blog')
+
+    class Admin:
+        pass
+
+    def  __str__(self):
+        return "%s %s %s %s %s"%(self.postCode,self.headLine,self.postImage,self.postStatus,self.time)
+
+class  banner(models.Model):
+    bannerImage=models.ImageField(upload_to=Image_Folder+'banner')
+    bannerText=models.CharField(max_length=100)
+    bannerHeading=models.CharField(max_length=100)
+    bannerStatus=models.BooleanField(default=False)
+    class Admin:
+        pass
+
+    def __str__(self):
+        return "%s %s %s %s"%(self.bannerText,self.bannerHeading,self.bannerStatus,self.bannerImage)
 
 
