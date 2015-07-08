@@ -214,19 +214,31 @@
 <td></td>
 <td></td>
 <td></td>
-<td><input type="submit" value="CheckOut" class="btn btn-success"></td>
+<td>
+  <input type="button"  onClick="checkout()" value="CheckOut" class="btn btn-success">
+</td>
  </tr>
  </tbody>
 </table>
 {% endifequal %}
 {# end cartitem page#}
 
-    
+
+{# shipping #}
+{% ifequal page "shipping" %}
+<table class="table">
+ {{shippingform.as_table}}
+</table>
+ 
+{% endifequal %} 
+
+
   {# footer of page #}
   <div class="jumbotron">
    {% include 'home/footer.html' %}
    {# General Use Licence All Right to HIOS Organigestion #}
   <code class="text-center">WebDesign : HIOS@Product 2016</code>
   </div>
+
 
  {% endblock %}

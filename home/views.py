@@ -3,7 +3,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from home.models import User,Phone_Company,Phone_Model,Phone_Design,Selfi_Image,Offers
+from home.models import User,Phone_Company,Phone_Model,Phone_Design,Selfi_Image,Offers,ShippingAddress
 
 from django.db.models import Q
 from home.models import Create_Own_Design
@@ -13,7 +13,8 @@ from home.models import Banner
 
 
 def menuList(request):
-  menu_list=["HOME","PRODUCT","GIFT","CUSTOMIZE COVER","MAKE MONEY","TRACK YOUR ORDER"]
+  menu_list=["Home","Cover","Gift","Create Your Own Design","Track Your Order"]
+  menu_list=[x.upper() for x in menu_list]
   return menu_list
 
 def get_carousel(request):
@@ -22,7 +23,6 @@ def get_carousel(request):
 
 def get_baanner(request):
     obj=Banner.objects.all()
-    print obj
     return obj
 
 def get_offers(request):
@@ -32,7 +32,7 @@ def get_offers(request):
 
 def get_tophit_design(request,company='all',modelname='all'):
     if company=='all'and modelname=='all':
-        tophitlist=Phone_Design.objects.all().order_by('-design_hit_count')[:10]
+        tophitlist=Phone_Design.objects.all().order_by('-design_hit_count')[:6]
 
     elif modelname=='all':
         tophitlist=Phone_Design.objects.filter(design_model__model_company__company_name=company)
@@ -47,6 +47,9 @@ def get_selfilist(request):
      selfilist=Selfi_Image.objects.all().order_by('-selfi_time')[:10]
      return selfilist
 
+def get_topsaledesign(request):
+    topsaledesign=Phone_Design.objects.all().order_by('-upload_date')[:6]
+    return topsaledesign
 
 def get_companylist(request):
      company_list=Phone_Company.objects.all()
@@ -55,6 +58,11 @@ def get_companylist(request):
 def get_modellist(request,company="Apple"):
       modellist=Phone_Model.objects.filter(model_company__company_name=company)
       return modellist
+
+def get_topnewdesign(request):
+    topnewdesign=Phone_Design.objects.all().order_by('-upload_date')[:6]
+    return topnewdesign
+
 
 def main(request):
      menu_list=menuList(request)
@@ -71,11 +79,22 @@ def main(request):
      return data  
     
 def index(request):
+     topnewdesign=get_topnewdesign(request)
+     topsaledesign=get_topsaledesign(request)
      maindata=main(request)
+     maindata.update({'topnewdesign':topnewdesign})
+     maindata.update({'topsaledesign':topnewdesign})
      context=RequestContext(request,maindata)
-     #get_baanner(request)
      return render_to_response('home/home.html',context)
 
+def shipping(request):
+  maindata=main(request)
+  form=ShippingAddress()
+  maindata.update({"shippingform":form})
+  maindata.update({'page':"shipping"})
+  context=RequestContext(request,maindata)
+  template='home/commonpage.html'
+  return render_to_response(template,context)
 
 def sign_Up(request):
   if request.POST:
@@ -180,9 +199,6 @@ def   press(request):
 
 def payments(request):
      return openblog(request,"payments")
-
-def shipping(request):
-      return openblog(request,"shipping")
 
 
 def preturn(request):
