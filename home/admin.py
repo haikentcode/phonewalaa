@@ -47,7 +47,11 @@ class Admin_banner(admin.ModelAdmin):
     list_filter = ['bannerStatus','bannerHeading']
     search_fields = ['bannerHeading','bannerStatus']
 
+class Admin_ShippingAddress(admin.ModelAdmin):
+    list_display=['user']
 
+    
+        
 
 # Register your models here.
 admin.site.register(Offers,Admin_Offers)
@@ -60,7 +64,7 @@ admin.site.register(Item,Admin_Item)
 admin.site.register(blog,Admin_blog)
 admin.site.register(blogpost,Admin_blogspot)
 admin.site.register(banner,Admin_banner)
-
+admin.site.register(ShippingAddress,Admin_ShippingAddress)
 
 
 

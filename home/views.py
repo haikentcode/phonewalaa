@@ -3,14 +3,10 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from home.models import User,Phone_Company,Phone_Model,Phone_Design,Selfi_Image,Offers,ShippingAddress
-
-from django.db.models import Q
+from home.models import User,Phone_Company,Phone_Model,Phone_Design,Selfi_Image,Offers
 from home.models import Create_Own_Design
-from forms import SignupForm ,LoginForm
+from forms import SignupForm ,LoginForm ,Shipping
 from home.models import blog ,blogpost
-
-
 def menuList(request):
   menu_list=["Home","Cover","Gift","Create Your Own Design","Track Your Order"]
   menu_list=[x.upper() for x in menu_list]   
@@ -80,15 +76,15 @@ def index(request):
 
 def shipping(request):
   maindata=main(request)
-  form=ShippingAddress()
-  maindata.update({"shippingform":form})
+  sform=Shipping()
+  maindata.update({"shippingform":sform})
   maindata.update({'page':"shipping"})
   context=RequestContext(request,maindata)
   template='home/commonpage.html'
   return render_to_response(template,context)
 
 def sign_Up(request):
-  if request.POST:
+ if request.POST:
      data=request.POST
      firstName=data.get('firstName')
      lastName=data.get('lastName')
@@ -161,46 +157,7 @@ def  laptopskin(request):
        return openblog(request,"laptopskin")
 
 
-"""
-def profile(request):
-    return openblog(request,"Profile")
 
-def overview(request):
-     return openblog(request,"Overview")
-
-def policy(request):
-     return openblog(request,"Policy")
-
-def  termandcondition(request):
-      return openblog(request,"Terms & Condition")
-
-
-def  event(request):
-       return openblog(request,"Event")
-
-
-def  social(request):
-       return openblog(request,"Social")
-
-
-def   press(request):
-         return openblog(request,"Press")
-
-
-
-def payments(request):
-     return openblog(request,"payments")
-
-
-def preturn(request):
-      return openblog(request,"preturn")              
-            
-
-def  cancellation(request):
-     return openblog(request,"likedin")
-
-<<<<<<< HEAD
-"""
 
 def cartItemlist(request):
       maindata=main(request)
@@ -289,6 +246,17 @@ def  mobilecover(request):
      return render_to_response(template,context)
 
 
+
+def buttonClick(request):
+  if request.POST:
+      itemquantity=request.session["itemoncart"][request.POST["itemcode"]]
+      del request.session["itemoncart"][request.POST["itemcode"]]
+      request.session.modified=True
+      old=int(request.session['itemoncart_count'])
+      request.session['itemoncart_count']=old-int(itemquantity)
+  
+  return HttpResponseRedirect('/home/order/') 
+ 
 
 
 

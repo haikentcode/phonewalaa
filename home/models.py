@@ -112,8 +112,8 @@ class User(models.Model):
 
 class ShippingAddress(models.Model):
     fullName=models.CharField(max_length=100)
-    addressLine_1=models.CharField(max_length=200)
-    addressLine_2=models.CharField(max_length=200)
+    addressLine_1=models.TextField(max_length=200)
+    addressLine_2=models.TextField(max_length=200)
     town=models.CharField(max_length=20)
     stateName=models.CharField(max_length=50)
     pinCode=models.IntegerField()
@@ -156,7 +156,7 @@ class blog(models.Model):
           pass
 
       def  __str__(self):
-          return "%s %s"%(self.blogcode,self.blogname)
+          return "%s"%(self.blogname)
 
 
 class blogpost(models.Model):

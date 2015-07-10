@@ -11,4 +11,6 @@ urlpatterns=[
             url(r'^mobileskin',views.mobileskin,name="mobileskin"),
             url(r'^laptopskin',views.laptopskin,name="laptopskin"),
             url(r'^order',views.order,name="order"),
+            url(r'^buttonClick/$',views.buttonClick,name="buttonClick"),
+            url(r'^shipping/$',views.shipping,name="shipping")
           ]

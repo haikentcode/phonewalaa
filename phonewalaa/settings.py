@@ -37,7 +37,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home'
+    'home',
+    'widget_tweaks', #pip install django-widget-tweaks
+    'mathfilters' #pip install django-mathfilters
 )
 
 MIDDLEWARE_CLASSES = (

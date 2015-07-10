@@ -1,5 +1,6 @@
 {% extends "home/base.html" %}
 
+{% load mathfilters %}
 
 {# Title of page send by view.py methon in context #}
  {%block title%}
@@ -154,6 +155,12 @@
   {% endifequal %}
  {# end orderpage #}
 
+
+
+
+
+
+
 {# cartitem page #}
 {% ifequal page "cartitem"%}
  <table class="table table-hover table-striped">
@@ -165,6 +172,9 @@
   </thead>
   <tbody>
  {% for x in cartitemlist %}
+  {% with item=request.session.itemoncart code=x.design_code %}
+          {% for key,val in item.items %}
+             {% ifequal code key %}
   <tr>
      <td>
       <img src="/media/{{x.design_Image}}" width="50px" height="60px" class="img-thumbnail img-responsive grow">
@@ -177,19 +187,27 @@
      </td>
      <td>
       <div class="spinner">
-        {% with code=x.design_code %}
-       <input class="form-control" value="{{request.session.itemoncart.code}}">
-        {% endwith %}
+              <input type="text" class="form-control" value="{{val}}">
+             
       </div>
      </td>
      <td>
-      <h3 class="text-info">{{x.design_price}}*{{request.session.itemoncart.x.design_code}}</h3>
+      <h3 class="text-info">{{x.design_price|mul:val}}</h3>
      </td>
      <td>
-      <input type="submit" value="cancel" class="btn btn-warning">
+      
+      <form action="/home/buttonClick/" method="POST">
+        {% csrf_token %}
+        <input type="text" name="itemcode" value="{{x.design_code}}" style="display:none">
+        <input type="submit" name="hkclieck" value="removeCartItem" class="btn btn-warning">
+      </form>
+
      </td>
 
   </tr> 
+  {% endifequal %}
+      {% endfor %}
+      {% endwith %}
  {% endfor %}
  <tr class="primary">
   <td></td>
@@ -220,17 +238,47 @@
  </tr>
  </tbody>
 </table>
+
+
 {% endifequal %}
 {# end cartitem page#}
 
 
 {# shipping #}
+ <div class="row">
+  <form role="form">
 {% ifequal page "shipping" %}
-<table class="table">
- {{shippingform.as_table}}
-</table>
- 
+
+<div class="col-sm-6">
+   <div class="panel panel-info">
+    <div class="panel-heading "><h4>Shipping Address</h4></div>
+      <div class="panel-body">
+         <form role="form">
+            {{shippingform.as_p}}
+         </form>
+      </div>
+   </div>  
+</div>
+
+<div class="col-sm-1"></div>
+
+<div class="col-sm-5">
+   <div class="panel panel-info">
+     <div class="panel-heading "><h4>Payment Option</h4></div>
+     <div class="panel-body">
+             
+     </div>
+   </div>
+
+   <input type="submit" value="Continue" class="btn btn-info">
+ </form>
+</div>
+
 {% endifequal %} 
+ </div>
+ {# endshipping #}
+
+
 
 
   {# footer of page #}

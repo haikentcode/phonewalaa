@@ -19,68 +19,28 @@
 
 {% for obj in objkey %}
 
-{% if forloop.counter|divisibleby:2 %}
-<div class="row">
- <div class="col-sm-8">
-  <blockquote>
-  <p>{{ obj.postData}} </p>
-</blockquote>
-   <br/>
-  <br/>
+    {% if forloop.counter %}
+          
+      {% include 'home/blogtemplate1.html' with title=obj.headLine image=obj.postImage text=obj.postData %}
 
- </div>
-
- <div class="col-sm-4">
- <img src="/media/{{ obj.postImage }}" class="img-thumbnail img-responsive grow" width="300px" height="300px" >
-
-</div>
-
-</div>
-
-{% else %}
-<div class="row">
-
- <div class="col-sm-4">
- <img src="/media/{{ obj.postImage }}" class="img-thumbnail img-responsive grow" width="300px" height="300px" >
- </div>
-
- <div class="col-sm-8">
- <blockquote>
-  <p >{{ obj.postData}} </p>
-  </blockquote>
-   <br/>
-  <br/>
- </div>
-
-</div>
-
-{% endif %}
+    {% endif %}
 
 {% endfor %}
 
 
-{% else  %}
+ {% else  %}
+  {% for obj in objkey %}
 
-{% for obj in objkey %}
-<div class="row">
- <img src="/media/{{ obj.postImage }}" class="img-thumbnail img-responsive grow" width="300px" height="300px" >
-  <br/>
-  <br/>
-
-  <p >{{ obj.postData}} </p>
-  <br/>
-  <br/>
-
-</div>
-
-{% endfor %}
+  {% endfor %}
 
 {% endif %}
 
 
   {# footer of page #}
+
   <div class="jumbotron">
    {% include 'home/footer.html' %}
    <code class="text-center">WebDesign : HIOS@Product 2016</code>
   </div>
+
  {% endblock body %}
