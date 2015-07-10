@@ -14,10 +14,6 @@ def menuList(request):
   menu_list=[x.upper() for x in menu_list]
   return menu_list
 
-def get_carousel(request):
-   carousel=[{'headline':"haikent",'description':"this is stuf working here",'Imageurl':"home/bannerimage/1.jpg" },{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/2.jpg'},{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/3.jpg'},{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/4.jpg'},{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/5.jpg'}]
-   return carousel
-
 def get_baanner(request):
     obj=Banner.objects.all()
     return obj
@@ -63,7 +59,6 @@ def get_topnewdesign(request):
 
 def main(request):
      menu_list=menuList(request)
-     #carousel=get_carousel(request)
      carousel=get_baanner(request)
      print carousel
      offers=get_offers(request)
