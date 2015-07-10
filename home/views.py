@@ -7,14 +7,20 @@ from home.models import User,Phone_Company,Phone_Model,Phone_Design,Selfi_Image,
 from home.models import Create_Own_Design
 from forms import SignupForm ,LoginForm ,Shipping
 from home.models import blog ,blogpost
+from home.models import Banner
+
 def menuList(request):
   menu_list=["Home","Cover","Gift","Create Your Own Design","Track Your Order"]
-  menu_list=[x.upper() for x in menu_list]   
+  menu_list=[x.upper() for x in menu_list]
   return menu_list
 
 def get_carousel(request):
    carousel=[{'headline':"haikent",'description':"this is stuf working here",'Imageurl':"home/bannerimage/1.jpg" },{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/2.jpg'},{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/3.jpg'},{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/4.jpg'},{'headline':"haikent",'description':"this is stuf working here",'Imageurl':'home/bannerimage/5.jpg'}]
    return carousel
+
+def get_baanner(request):
+    obj=Banner.objects.all()
+    return obj
 
 def get_offers(request):
     offers=Offers.objects.all()[:5]
@@ -36,7 +42,6 @@ def get_tophit_design(request,company='all',modelname='all'):
 
 def get_selfilist(request):
      selfilist=Selfi_Image.objects.all().order_by('-selfi_time')[:10]
-
      return selfilist
 
 def get_topsaledesign(request):
@@ -50,12 +55,17 @@ def get_companylist(request):
 def get_modellist(request,company="Apple"):
       modellist=Phone_Model.objects.filter(model_company__company_name=company)
       return modellist
+
 def get_topnewdesign(request):
     topnewdesign=Phone_Design.objects.all().order_by('-upload_date')[:6]
     return topnewdesign
+
+
 def main(request):
      menu_list=menuList(request)
-     carousel=get_carousel(request)
+     #carousel=get_carousel(request)
+     carousel=get_baanner(request)
+     print carousel
      offers=get_offers(request)
      tophitlist=get_tophit_design(request)
      selfilist=get_selfilist(request)

@@ -174,15 +174,17 @@ class blogpost(models.Model):
     def  __str__(self):
         return "%s %s %s %s %s"%(self.postCode,self.headLine,self.postImage,self.postStatus,self.time)
 
-class  banner(models.Model):
-    bannerImage=models.ImageField(upload_to=Image_Folder+'banner')
-    bannerText=models.CharField(max_length=100)
-    bannerHeading=models.CharField(max_length=100)
+class  Banner(models.Model):
+    Imageurl=models.ImageField(upload_to=Image_Folder+'banner')
+    description=models.CharField(max_length=100)
+    headline=models.CharField(max_length=100)
     bannerStatus=models.BooleanField(default=False)
     class Admin:
         pass
 
-    def __str__(self):
-        return "%s %s %s %s"%(self.bannerText,self.bannerHeading,self.bannerStatus,self.bannerImage)
-
+    def image_tag(self):
+        #--hkcheck--flag .. "/media/" use var 
+       return u'<img src="/media/%s" width="100px" height="100px"/>' % self.Imageurl
+    image_tag.short_description = 'Image'
+    image_tag.allow_tags = True       
 

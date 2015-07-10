@@ -43,15 +43,13 @@ class Admin_blogspot(admin.ModelAdmin):
     list_display = ['headLine',]
 
 class Admin_banner(admin.ModelAdmin):
-    list_display = ['bannerText','bannerHeading','bannerStatus','bannerImage']
-    list_filter = ['bannerStatus','bannerHeading']
-    search_fields = ['bannerHeading','bannerStatus']
+    list_display = ['headline']
+
 
 class Admin_ShippingAddress(admin.ModelAdmin):
     list_display=['user']
 
-    
-        
+
 
 # Register your models here.
 admin.site.register(Offers,Admin_Offers)
@@ -63,9 +61,8 @@ admin.site.register(Selfi_Image,Admin_Selfi)
 admin.site.register(Item,Admin_Item)
 admin.site.register(blog,Admin_blog)
 admin.site.register(blogpost,Admin_blogspot)
-admin.site.register(banner,Admin_banner)
 admin.site.register(ShippingAddress,Admin_ShippingAddress)
-
+admin.site.register(Banner,Admin_banner)
 
 
 
