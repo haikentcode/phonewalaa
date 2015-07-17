@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-sm-2 well">
+    <ul class="nav nav-pills nav-stacked">
+  {% for company in company_list %}
+     {% ifequal company activecompany %}
+        <li class="active">
+          <a href="/home/mobilecover/?company={{company.company_name}}">
+            <img src="/media/{{company.company_logo}}"width="30px" class="img-thumbnail img-responsive grow">
+          {{company.company_name}}
+          </a>
+        </li>
+     {% else %}
+         <li>
+          <a href="/home/mobilecover/?company={{company.company_name}}">
+            <img src="/media/{{company.company_logo}}"width="30px" class="img-thumbnail img-responsive grow">
+            {{company.company_name}}
+          </a>
+         </li>
+     {% endifequal %}
+
+  {% endfor %}
+    </ul>
+    <hr/>
+
+  </div>
+  <div class="col-sm-1"></div>
+   <div class="col-sm-9">
+        <div class="row well">
+          <ul class="pagination pagination-lg">
+            {% if activecompany.company_logo %}
+            <li ><a href="#"><img src="/media/{{activecompany.company_logo}}" width="20px"></a></li>
+            {% endif %}
+            {% for model in modellist %}
+              <li {% ifequal activemodel model %} class="active" {% endifequal %} >
+
+                <a href="?company={{activecompany.company_name}}&model={{model.model_name}}">{{model.model_name}}</a></li>
+            {% endfor %}
+          </ul>
+          
+          <br>
+           {% include 'home/tophitdesign.html'  with tophitlist=itemlist %}
+        </div>
+   </div>
+  </div>

@@ -48,7 +48,7 @@ def get_companylist(request):
      company_list=Phone_Company.objects.all()
      return company_list
 
-def get_modellist(request,company="Apple"):
+def get_modellist(request,company):
       modellist=Phone_Model.objects.filter(model_company__company_name=company)
       return modellist
 
@@ -83,10 +83,15 @@ def shipping(request):
   maindata=main(request)
   sform=Shipping()
   maindata.update({"shippingform":sform})
-  maindata.update({'page':"shipping"})
+  if 'emailId' in request.session:
+     maindata.update({'page':"shipping"})
+  else:
+     maindata.update({'page':"loginsignup"})     
   context=RequestContext(request,maindata)
   template='home/commonpage.html'
   return render_to_response(template,context)
+
+
 
 def sign_Up(request):
  if request.POST:
@@ -118,14 +123,15 @@ def  login(request):
      flag=False
 
      try:
-          obj=User.objects.filter(emailId=emailId)
+          obj=User.objects.get(emailId=emailId)
           if obj.emailId==emailId and obj.password==password:
                flag=True
                request.session['emailId']=emailId
+               return HttpResponseRedirect('/home/')
           else:
                flag=False
-     except:
-          return HttpResponse('exception')
+     except Exception,e:
+          return HttpResponse(e)
 
 
 def  logout(request):

@@ -1,0 +1,77 @@
+ {% load mathfilters %}
+<table class="table table-hover table-striped">
+  <thead>
+    <tr class="info">
+   <th>ITEM</th><th>ITEM NAME</th><th>ITEM PRICE</th><th>ITEM QUANTITY</th><th>TOTAL</th>
+   <th></th>
+   </tr>
+  </thead>
+  <tbody>
+ {% for x in cartitemlist %}
+  {% with item=request.session.itemoncart code=x.design_code %}
+          {% for key,val in item.items %}
+             {% ifequal code key %}
+  <tr>
+     <td>
+      <img src="/media/{{x.design_Image}}" width="50px" height="60px" class="img-thumbnail img-responsive grow">
+     </td>
+     <td>
+       <h4 class="text-info">{{x.design_name}}</h4>
+     </td>
+     <td>
+      <h3 class="text-info">{{x.design_price}}</h3>
+     </td>
+     <td>
+      <div class="spinner">
+              <input type="text" class="form-control" value="{{val}}">
+             
+      </div>
+     </td>
+     <td>
+      <h3 class="text-info">{{x.design_price|mul:val}}</h3>
+     </td>
+     <td>
+      
+      <form action="/home/buttonClick/" method="POST">
+        {% csrf_token %}
+        <input type="text" name="itemcode" value="{{x.design_code}}" style="display:none">
+        <input type="submit" name="hkclieck" value="removeCartItem" class="btn btn-warning">
+      </form>
+
+     </td>
+
+  </tr> 
+  {% endifequal %}
+      {% endfor %}
+      {% endwith %}
+ {% endfor %}
+ <tr class="primary">
+  <td></td>
+  <td>
+    <div class="spinner">
+       <input class="form-control" value="{{request.session.itemoncart.code}}">
+    </div>
+  </td>
+  <td>
+     <input type="submit" value="Apply Code" class="btn btn-info">
+  </td>
+  <td>
+   <h3 class="text-info"> Subtotal</h3>
+  </td>
+  <td></td>
+  <td></td>
+ </tr>
+
+ <tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>
+  <input type="button"  onClick="checkout()" value="CheckOut" class="btn btn-success">
+</td>
+ </tr>
+ </tbody>
+</table>
+

@@ -29,10 +29,24 @@
 
 
  {% else  %}
+ 
   {% for obj in objkey %}
 
   {% endfor %}
 
+{% endif %}
+
+
+{% if  objkey.0.blog.blogname == "Event" %}
+    {% for obj in objkey %}
+
+      {% if forloop.counter %}
+            
+        {% include 'home/blogtemplate1.html' with title=obj.headLine image=obj.postImage text=obj.postData %}
+
+      {% endif %}
+
+    {% endfor %}
 {% endif %}
 
 

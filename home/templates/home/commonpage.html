@@ -18,265 +18,59 @@
  {%block body %}
 
 
-  {# home/mobilecover  #}
-  {% ifequal page "mobilecover"  %} 
-  <div class="row">
-  <div class="col-sm-2 well">
-    <ul class="nav nav-pills nav-stacked">
-  {% for company in company_list %}
-     {% ifequal company activecompany %}
-        <li class="active">
-          <a href="/home/mobilecover/?company={{company.company_name}}">
-            <img src="/media/{{company.company_logo}}"width="30px" class="img-thumbnail img-responsive grow">
-          {{company.company_name}}
-          </a>
-        </li>
-     {% else %}
-         <li>
-          <a href="/home/mobilecover/?company={{company.company_name}}">
-            <img src="/media/{{company.company_logo}}"width="30px" class="img-thumbnail img-responsive grow">
-            {{company.company_name}}
-          </a>
-         </li>
+  {# mobilecover  #}
+     {% ifequal page "mobilecover"  %} 
+         {% include 'home/mobilecover.html' with company_list=company_list modelist=modellist %}
      {% endifequal %}
-
-  {% endfor %}
-    </ul>
-    <hr/>
-
-  </div>
-  <div class="col-sm-1"></div>
-   <div class="col-sm-9">
-        <div class="row well">
-          <ul class="pagination pagination-lg">
-            {% if activecompany.company_logo %}
-            <li ><a href="#"><img src="/media/{{activecompany.company_logo}}" width="20px"></a></li>
-            {% endif %}
-            {% for model in modellist %}
-              <li {% ifequal activemodel model %} class="active" {% endifequal %} >
-
-                <a href="?company={{activecompany.company_name}}&model={{model.model_name}}">{{model.model_name}}</a></li>
-            {% endfor %}
-          </ul>
-          
-          <br>
-           {% include 'home/tophitdesign.html'  with tophitlist=itemlist %}
-        </div>
-   </div>
-  </div>
-
-  {% endifequal %}
+  {# endmobilecover #}
 
 
-
-  {# --orderpage-- #}
-  {% ifequal page "orderpage" %}
-   
-   <div class="row"> 
-          <div class="col-sm-3">
-            <div class="well">
-             <img src="/media/{{item.design_Image}}" class="img-thumbnail img-responsive grow">
-            </div>
-
-            <div class="well">
-               <dl>
-                    <dt>Company</dt>
-                       <dd>{{item.design_model.model_company.company_name}}</dd>
-                    <dt>Model</dt>
-                       <dd>{{item.design_model.model_name}}</dd>
-               </dl> 
-            </div>
-          
-          </div>
-          <div class="col-sm-9">
-                <h2 class="text-center text-info">{{item.design_name}}</h2>
-                <hr/>
-                     {# tab menu #}
-                     <div class="row">
-  <h2 class="text-success">{{item.design_model.model_company.company_name}}~{{item.design_model.model_name}}~{{item.design_name}}</h2>
-  <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#home">Description</a></li>
-    <li><a data-toggle="tab" href="#menu1">Shipping</a></li>
-  </ul>
-
-  <div class="tab-content">
-    <div id="home" class="tab-pane fade in active col-sm-6">
-      <h3></h3>
-      {{item.design_description}}
-
-    </div>
-    <div id="menu1" class="tab-pane fade col-sm-6">
-      <h3>Shipping</h3>
-      
-        Order is dispatched on the same day you click buy now(or max the next day),<br/>
-        our product reaches to you within 2-4 working days.
-        We try to deliver our products on time-everytime.
-  
-    </div>
-
-  </div>
-</div>
-
-   {#-------------------------------------------------------------#}
-              <hr/>
-                <div class="row">
-                   <div class="col-sm-6 text-info">
-                     <h3>Availablity = {{item.design_status}}</h3>
-                     <h3>Price = &#8377; {{item.design_price}}</h3>
-                   </div>
-                </div>
-                  
-                  
-                 
-                 <div class="row text-info">
-                  <form action="/home/order/" method="post">
-                     {% csrf_token %}
-                     <input name="itemcode" value="{{item.design_code}}" style="display:none"> 
-                     <div class=" col-sm-6">
-                      <div class="spinner">
-                       Quantity<input name="itemquantity" type="text" class="form-control" value="1">
-                      </div>
-                      <hr/>
-                    <input type="submit" name="action"  class="btn btn-primary" value="Add to Cart">
-                    <input type="submit" name="action" class="btn btn-info" value="Buy Now">
-                     </div>
-                  </form>
-                </div>
+  {# orderpage #}
+    {% ifequal page "orderpage" %}
+      {% include 'home/orderpage.html' with item=item similaritem=similaritem %}
+    {% endifequal %}
+  {# end orderpage #}
 
 
-          </div>
-
-   </div>
-   {#----similar item list ------#}
-   <div class="row well">
-        {% include 'home/tophitdesign.html'  with tophitlist=similaritem %}
-   </div>
-
-  {% endifequal %}
- {# end orderpage #}
+  {# cartitem page #}
+     {% ifequal page "cartitem"%}
+      {% include 'home/cartitem.html' with cartitemlist=cartitemlist%}
+     {% endifequal %}
+  {# end cartitem page#}
 
 
-
-
-
-
-
-{# cartitem page #}
-{% ifequal page "cartitem"%}
- <table class="table table-hover table-striped">
-  <thead>
-    <tr class="info">
-   <th>ITEM</th><th>ITEM NAME</th><th>ITEM PRICE</th><th>ITEM QUANTITY</th><th>TOTAL</th>
-   <th></th>
-   </tr>
-  </thead>
-  <tbody>
- {% for x in cartitemlist %}
-  {% with item=request.session.itemoncart code=x.design_code %}
-          {% for key,val in item.items %}
-             {% ifequal code key %}
-  <tr>
-     <td>
-      <img src="/media/{{x.design_Image}}" width="50px" height="60px" class="img-thumbnail img-responsive grow">
-     </td>
-     <td>
-       <h4 class="text-info">{{x.design_name}}</h4>
-     </td>
-     <td>
-      <h3 class="text-info">{{x.design_price}}</h3>
-     </td>
-     <td>
-      <div class="spinner">
-              <input type="text" class="form-control" value="{{val}}">
-             
-      </div>
-     </td>
-     <td>
-      <h3 class="text-info">{{x.design_price|mul:val}}</h3>
-     </td>
-     <td>
-      
-      <form action="/home/buttonClick/" method="POST">
-        {% csrf_token %}
-        <input type="text" name="itemcode" value="{{x.design_code}}" style="display:none">
-        <input type="submit" name="hkclieck" value="removeCartItem" class="btn btn-warning">
-      </form>
-
-     </td>
-
-  </tr> 
-  {% endifequal %}
-      {% endfor %}
-      {% endwith %}
- {% endfor %}
- <tr class="primary">
-  <td></td>
-  <td>
-    <div class="spinner">
-       <input class="form-control" value="{{request.session.itemoncart.code}}">
-    </div>
-  </td>
-  <td>
-     <input type="submit" value="Apply Code" class="btn btn-info">
-  </td>
-  <td>
-   <h3 class="text-info"> Subtotal</h3>
-  </td>
-  <td></td>
-  <td></td>
- </tr>
-
- <tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td>
-  <input type="button"  onClick="checkout()" value="CheckOut" class="btn btn-success">
-</td>
- </tr>
- </tbody>
-</table>
-
-
-{% endifequal %}
-{# end cartitem page#}
-
-
-{# shipping #}
- <div class="row">
-  <form role="form">
-{% ifequal page "shipping" %}
-
-<div class="col-sm-6">
-   <div class="panel panel-info">
-    <div class="panel-heading "><h4>Shipping Address</h4></div>
-      <div class="panel-body">
-         <form role="form">
-            {{shippingform.as_p}}
-         </form>
-      </div>
-   </div>  
-</div>
-
-<div class="col-sm-1"></div>
-
-<div class="col-sm-5">
-   <div class="panel panel-info">
-     <div class="panel-heading "><h4>Payment Option</h4></div>
-     <div class="panel-body">
-             
-     </div>
-   </div>
-
-   <input type="submit" value="Continue" class="btn btn-info">
- </form>
-</div>
-
-{% endifequal %} 
- </div>
+ {# shipping #}
+   {% ifequal page "shipping" %}
+     {% include 'home/shipping.html' with shippingform=shippingform %}
+   {% endifequal %} 
  {# endshipping #}
+
+
+{# loginsignuppage #}
+  {% ifequal page "loginsignup" %}
+    <div class="row">
+      <div class="col-sm-2"></div>
+      <div class="col-sm-6">
+        <h3>Please Login First and Create Account</h3>
+      {% include 'home/loginsignupbutton.html' with  loginform=loginform signupform=signupform  %}
+      </div>
+      <div class="col-sm-4"></div>
+     
+   </div>
+    <br>
+  {% endifequal %}
+{# endloginsignuppage #}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -290,3 +84,7 @@
 
 
  {% endblock %}
+
+
+
+
